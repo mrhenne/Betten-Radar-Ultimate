@@ -416,6 +416,7 @@
 
     function render() {
         const content = document.getElementById('main-content');
+        if (!content) return;
         content.innerHTML = '';
 
         if (appState.currentTab === 'quick') {
