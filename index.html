@@ -3,216 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betten-Radar | Helios Duisburg</title>
+    <title>Betten-Radar | Helios</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
             --helios-green: #82bc00;
             --helios-dark-green: #6a9a00;
             --helios-blue: #004a99;
-            --glass-white: rgba(255, 255, 255, 0.9);
-            --bg-color: #f3f4f6;
+            --glass-bg: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-highlight: rgba(255, 255, 255, 0.8);
             --text-color: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --glow-color: rgba(130, 188, 0, 0.6);
         }
         
         body.dark-mode {
-            --bg-color: #0f172a;
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
             --text-color: #f1f5f9;
-            --card-bg: rgba(30, 41, 59, 0.9);
-            --glass-white: rgba(30, 41, 59, 0.9);
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            --glow-color: rgba(130, 188, 0, 0.8);
+            background: radial-gradient(circle at top right, #1e293b, #020617) !important;
         }
 
         body {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background: radial-gradient(circle at top right, #cbd5e1, #e2e8f0, #f8fafc);
             background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             color: var(--text-color);
             margin: 0;
-            transition: all 0.3s ease;
+            transition: background 0.5s ease;
         }
 
+        /* MAXIMALES LIQUID GLASS */
         .liquid-glass {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px) saturate(250%);
+            -webkit-backdrop-filter: blur(40px) saturate(250%);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
+            border-left: 1px solid var(--glass-highlight);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 0 20px rgba(255,255,255,0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .dark-mode .liquid-glass {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.05);
+        }
+
+        /* EINHEITLICHE EINGABEFELDER MIT ZWANGS-GLOW */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-weight: 800;
+            outline: none !important;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: var(--text-color);
+            backdrop-filter: blur(15px);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .glass-input {
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Knallharter Override für den Fokus Status */
+        .glass-input:focus, 
+        .glass-input:active,
+        select.glass-input:focus,
+        select.glass-input:active {
+            background-color: rgba(130, 188, 0, 0.15) !important;
+            border-color: var(--helios-green) !important;
+            box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px rgba(130, 188, 0, 0.2) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Select Felder zähmen */
+        select.glass-input {
+            cursor: pointer;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2382bc00'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 14px center !important;
+            background-size: 20px !important;
+            padding-right: 50px !important;
         }
 
         .status-pulse {
-            animation: pulse-ring 2.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+            animation: pulse-ring 2s infinite;
         }
 
         @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(0.8); opacity: 0.5; }
+            0% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0.8); }
+            70% { box-shadow: 0 0 0 20px rgba(130, 188, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0); }
         }
 
         .tab-active {
             background: var(--helios-green) !important;
             color: white !important;
-            box-shadow: 0 8px 20px -5px rgba(130, 188, 0, 0.5);
-            transform: translateY(-2px);
+            box-shadow: 0 15px 35px var(--glow-color);
+            transform: translateY(-4px);
+            border-color: transparent !important;
         }
 
         .stepper-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            font-weight: 900;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.2s;
-            user-select: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .stepper-btn:active { transform: scale(0.9); }
+
+        .dark-mode .stepper-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stepper-btn:hover {
+            background: var(--helios-green);
+            color: white;
+            border-color: var(--helios-green);
+            box-shadow: 0 0 25px var(--glow-color);
+            transform: scale(1.15);
+        }
 
         .critical-row {
-            background-color: rgba(239, 68, 68, 0.15) !important;
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-left: 8px solid #ef4444 !important;
         }
 
         .cap-bar {
-            height: 4px;
-            border-radius: 2px;
-            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.15);
             overflow: hidden;
-            margin-top: 4px;
+            margin-top: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
+        
         .cap-fill {
             height: 100%;
-            transition: width 0.5s ease;
+            transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .glass-card {
+            border-radius: 3rem;
+            overflow: hidden;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            backdrop-filter: blur(20px);
         }
 
         @media print {
             .no-print { display: none !important; }
             body { background: white !important; padding: 0 !important; color: black !important; }
-            .liquid-glass { border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; background: white !important; }
+            .liquid-glass, .glass-card { border: 1px solid #000 !important; background: white !important; backdrop-filter: none !important; box-shadow: none !important; }
         }
     </style>
 </head>
-<body class="p-3 md:p-8 lg:p-10">
+<body class="p-4 md:p-12">
 
-<div class="max-w-7xl mx-auto container">
+<div class="max-w-7xl mx-auto">
     
     <!-- DASHBOARD -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10 no-print">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12 no-print">
         
-        <div id="zna-status-panel" class="lg:col-span-1 liquid-glass rounded-[2.5rem] p-7 border-l-[12px] border-[#82bc00] flex flex-col justify-between shadow-xl transition-all duration-500">
-            <div>
-                <h3 class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">ZNA Status</h3>
-                <div class="flex items-center gap-4">
-                    <div id="zna-indicator" class="w-5 h-5 rounded-full bg-[#82bc00] status-pulse"></div>
+        <div id="zna-status-panel" class="lg:col-span-1 liquid-glass rounded-[3.5rem] p-8 border-l-[15px] border-[#82bc00] flex flex-col justify-between relative overflow-hidden">
+            <div id="zna-bg-glow" class="absolute inset-0 opacity-20 pointer-events-none transition-all duration-700"></div>
+            <div class="relative z-10">
+                <h3 class="text-[12px] font-black opacity-60 uppercase tracking-[0.3em] mb-4">ZNA Status</h3>
+                <div class="flex items-center gap-6">
+                    <div id="zna-indicator" class="w-7 h-7 rounded-full bg-[#82bc00] status-pulse"></div>
                     <div class="flex flex-col">
-                        <span id="zna-status-label" class="text-2xl font-black tracking-tight text-nowrap">Normalbetrieb</span>
-                        <span id="zna-timer" class="text-[10px] font-bold opacity-60">Seit 00:00:00</span>
+                        <span id="zna-status-label" class="text-3xl font-black tracking-tight leading-tight">Normalbetrieb</span>
+                        <span id="zna-timer" class="text-[12px] font-bold opacity-75 mt-1">Seit 00:00:00</span>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-2 mt-6">
-                <button onclick="setZNAStatus('normal', '#82bc00', 'Normalbetrieb')" class="w-10 h-10 rounded-2xl bg-green-100 border border-green-300 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">🟢</button>
-                <button onclick="setZNAStatus('high', '#fbbf24', 'Erhöht')" class="w-10 h-10 rounded-2xl bg-yellow-100 border border-yellow-300 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">🟡</button>
-                <button onclick="setZNAStatus('crit', '#ef4444', 'Kritisch')" class="w-10 h-10 rounded-2xl bg-red-100 border border-red-300 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">🔴</button>
-                <button onclick="setZNAStatus('stop', '#7c3aed', 'Abmeldung')" class="w-10 h-10 rounded-2xl bg-purple-100 border border-purple-300 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">🟣</button>
+            <div class="flex gap-4 mt-8 relative z-10">
+                <button onclick="setZNAStatus('normal', '#82bc00', 'Normalbetrieb')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟢</button>
+                <button onclick="setZNAStatus('high', '#fbbf24', 'Erhöht')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟡</button>
+                <button onclick="setZNAStatus('crit', '#ef4444', 'Kritisch')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🔴</button>
+                <button onclick="setZNAStatus('stop', '#7c3aed', 'Abmeldung')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟣</button>
             </div>
         </div>
 
-        <div class="lg:col-span-3 liquid-glass rounded-[2.5rem] p-7 grid grid-cols-2 md:grid-cols-6 gap-6 shadow-xl">
-            <div class="text-center md:border-r border-slate-300">
-                <p class="text-[10px] font-black uppercase mb-2 tracking-widest text-nowrap">Bett (M)</p>
-                <p id="sum-m" class="text-3xl font-black text-[#004a99]">0</p>
+        <div class="lg:col-span-3 liquid-glass rounded-[3.5rem] p-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
+                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Männer</p>
+                <p id="sum-m" class="text-5xl font-black text-[#004a99]">0</p>
             </div>
-            <div class="text-center md:border-r border-slate-300">
-                <p class="text-[10px] font-black uppercase mb-2 tracking-widest text-nowrap">Bett (W)</p>
-                <p id="sum-w" class="text-3xl font-black text-pink-700">0</p>
+            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
+                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Frauen</p>
+                <p id="sum-w" class="text-5xl font-black text-pink-600">0</p>
             </div>
-            <div class="text-center md:border-r border-slate-300">
-                <p class="text-[10px] font-black uppercase mb-2 tracking-widest text-nowrap text-amber-600">Zimmer</p>
-                <p id="sum-rooms" class="text-3xl font-black">0</p>
+            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
+                <p class="text-[11px] font-black uppercase mb-2 tracking-widest text-amber-500">Zimmer</p>
+                <p id="sum-rooms" class="text-5xl font-black">0</p>
             </div>
-            <div class="text-center md:border-r border-slate-300">
-                <p class="text-[10px] font-black uppercase mb-2 tracking-widest text-nowrap">Iso</p>
-                <p id="sum-iso" class="text-3xl font-black text-amber-700">0</p>
+            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
+                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Iso</p>
+                <p id="sum-iso" class="text-5xl font-black text-amber-700">0</p>
             </div>
-            <div class="text-center md:border-r border-slate-300">
-                <p class="text-[10px] font-black uppercase mb-2 tracking-widest text-nowrap">Entl.</p>
-                <p id="sum-entl" class="text-3xl font-black text-[#6a9a00]">0</p>
+            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
+                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Entl.</p>
+                <p id="sum-entl" class="text-5xl font-black text-[#82bc00]">0</p>
             </div>
-            <div class="text-center bg-white/10 border border-slate-200 rounded-3xl flex flex-col justify-center p-2 shadow-inner">
-                <p class="text-[9px] font-black text-[#82bc00] uppercase mb-1 tracking-widest text-nowrap">Last Check</p>
-                <p id="master-check-time" class="text-xl font-black tracking-tighter">--:--</p>
+            <div class="text-center bg-white/20 rounded-[2.5rem] flex flex-col justify-center p-4 border border-white/30 shadow-inner backdrop-blur-sm">
+                <p class="text-[10px] font-black text-[#82bc00] uppercase mb-1 tracking-widest drop-shadow-sm">Update</p>
+                <p id="master-check-time" class="text-2xl font-black tracking-tighter">--:--</p>
             </div>
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
-        <div class="flex items-center gap-5">
-            <div class="w-16 h-16 bg-white rounded-[1.8rem] flex items-center justify-center shadow-xl border border-slate-200 transform -rotate-3 transition-all duration-300">
-                 <svg viewBox="0 0 24 24" class="w-10 h-10 text-[#82bc00]" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+    <!-- HEADER NAVIGATION -->
+    <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-8">
+        <div class="flex items-center gap-8 group">
+            <div class="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center shadow-2xl border border-white/80 transform group-hover:rotate-6 transition-all duration-700 relative overflow-hidden">
+                 <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent"></div>
+                 <svg viewBox="0 0 24 24" class="w-14 h-14 text-[#82bc00] relative z-10" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
             </div>
             <div>
-                <h1 class="text-4xl font-black tracking-tighter leading-none mb-1 text-nowrap">Betten-Radar</h1>
-                <p class="text-[13px] font-black text-[#6a9a00] uppercase tracking-[0.4em]">Helios Duisburg</p>
+                <h1 class="text-6xl font-black tracking-tighter leading-none mb-1 drop-shadow-sm">Betten-Radar</h1>
+                <p class="text-[16px] font-black text-[#82bc00] uppercase tracking-[0.6em] opacity-80">Helios Health Group</p>
             </div>
         </div>
         
-        <div class="flex bg-slate-200/50 p-1.5 rounded-[1.8rem] shadow-inner border border-slate-300 no-print overflow-x-auto max-w-full gap-1">
-            <button id="tab-betten" onclick="switchTab('betten')" class="px-5 py-3 rounded-[1.4rem] text-[10px] font-black uppercase tracking-widest transition-all tab-active text-nowrap">🏥 Betten</button>
-            <button id="tab-quick" onclick="switchTab('quick')" class="px-5 py-3 rounded-[1.4rem] text-[10px] font-black uppercase tracking-widest transition-all text-slate-500 hover:text-slate-900 text-nowrap">⚡ Schnellansicht</button>
-            <button id="tab-iso" onclick="switchTab('iso')" class="px-5 py-3 rounded-[1.4rem] text-[10px] font-black uppercase tracking-widest transition-all text-slate-500 hover:text-slate-900 text-nowrap">☣️ Isolation</button>
-            <button id="tab-history" onclick="switchTab('history')" class="px-5 py-3 rounded-[1.4rem] text-[10px] font-black uppercase tracking-widest transition-all text-slate-500 hover:text-slate-900 text-nowrap">📜 History</button>
-            <button onclick="toggleDarkMode()" class="px-4 py-3 rounded-[1.4rem] text-[10px] font-black uppercase transition-all bg-slate-100 text-slate-600 hover:bg-slate-200">🌓 Mode</button>
+        <div class="flex bg-white/20 p-2.5 rounded-[3rem] shadow-2xl border border-white/30 no-print overflow-x-auto max-w-full gap-2 backdrop-blur-xl">
+            <button id="tab-betten" onclick="switchTab('betten')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all tab-active">🏥 Betten</button>
+            <button id="tab-quick" onclick="switchTab('quick')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">⚡ Schnellansicht</button>
+            <button id="tab-iso" onclick="switchTab('iso')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">☣️ Isolation</button>
+            <button id="tab-history" onclick="switchTab('history')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">📜 History</button>
+            <button onclick="toggleDarkMode()" class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition-all border border-white/40 text-xl shadow-inner">🌓</button>
         </div>
     </header>
 
-    <!-- CONTENT -->
-    <div id="main-content" class="liquid-glass rounded-[3rem] overflow-hidden shadow-2xl border border-slate-300">
-        <!-- Gefüllt via JS -->
+    <!-- MAIN VIEWPORT -->
+    <div id="main-content" class="liquid-glass rounded-[4rem] overflow-hidden mb-16">
+        <!-- JS Render -->
     </div>
 
-    <!-- FOOTER -->
-    <footer class="mt-10 flex flex-col md:flex-row gap-6 justify-between items-center no-print">
-        <div class="flex gap-3 w-full md:w-auto">
-            <input type="text" id="add-station-input" placeholder="Neue Station..." class="flex-1 md:w-72 bg-white/20 px-6 py-4 rounded-[1.8rem] border border-slate-300 focus:ring-4 focus:ring-[#82bc00]/30 outline-none font-bold text-sm shadow-inner text-inherit">
-            <button onclick="addStation()" class="bg-[#82bc00] text-white px-8 py-4 rounded-[1.8rem] font-black text-[11px] uppercase tracking-widest hover:bg-[#6a9a00] transition-all shadow-xl border-b-4 border-[#6a9a00]">Add+</button>
+    <!-- ACTION FOOTER -->
+    <footer class="flex flex-col md:flex-row gap-10 justify-between items-center no-print pb-24">
+        <div class="flex gap-5 w-full md:w-auto">
+            <input type="text" id="add-station-input" placeholder="Neue Station hinzufügen..." class="glass-input flex-1 md:w-[28rem] text-xl py-6 px-10">
+            <button onclick="addStation()" class="bg-[#82bc00] text-white px-12 py-6 rounded-[2.5rem] font-black text-[14px] uppercase tracking-widest hover:bg-[#6a9a00] transition-all shadow-2xl transform hover:scale-105 active:scale-95 border-t border-white/40 border-b-4 border-[#5d8500]">Station+</button>
         </div>
         
-        <div class="flex gap-4 items-center flex-wrap justify-center">
-            <button onclick="copyStatusToClipboard()" class="bg-blue-50/10 text-blue-600 border-2 border-blue-200 px-6 py-4 rounded-[1.8rem] font-black text-[11px] uppercase tracking-widest hover:bg-blue-50 transition-all flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+        <div class="flex gap-6 items-center flex-wrap justify-center">
+            <button onclick="copyStatusToClipboard()" class="glass-input bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/40 px-10 py-6 rounded-[2.5rem] font-black text-[13px] uppercase tracking-widest hover:bg-blue-500/30 transition-all flex items-center gap-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                 Copy Status
             </button>
-            <button onclick="resetValues()" class="bg-red-50/10 text-red-600 border-2 border-red-200 px-6 py-4 rounded-[1.8rem] font-black text-[11px] uppercase tracking-widest hover:bg-red-50 transition-all flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                Reset & Archiv
+            <button onclick="resetValues()" class="glass-input bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/40 px-10 py-6 rounded-[2.5rem] font-black text-[13px] uppercase tracking-widest hover:bg-red-500/30 transition-all flex items-center gap-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Schicht-Reset
             </button>
         </div>
     </footer>
 </div>
 
-<!-- Modal -->
-<div id="custom-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
-    <div class="liquid-glass rounded-[2rem] p-8 max-w-sm w-full shadow-2xl text-center border-2 border-slate-400">
-        <h4 id="modal-title" class="text-xl font-black mb-3 uppercase tracking-tight">Bestätigung</h4>
-        <p id="modal-text" class="mb-8 font-bold leading-relaxed"></p>
-        <div class="flex gap-3">
-            <button id="modal-cancel" class="flex-1 bg-slate-200 text-slate-700 py-4 rounded-2xl font-black uppercase text-xs hover:bg-slate-300">Abbruch</button>
-            <button id="modal-confirm" class="flex-1 bg-[#82bc00] text-white py-4 rounded-2xl font-black uppercase text-xs shadow-lg hover:bg-[#6a9a00]">Bestätigen</button>
+<!-- Glass Modal -->
+<div id="custom-modal" class="fixed inset-0 bg-black/85 backdrop-blur-3xl hidden items-center justify-center z-[100] p-6">
+    <div class="liquid-glass rounded-[4rem] p-16 max-w-xl w-full text-center">
+        <h4 id="modal-title" class="text-4xl font-black mb-6 uppercase tracking-tighter drop-shadow-sm">Aktion bestätigen</h4>
+        <p id="modal-text" class="text-xl mb-12 font-bold opacity-90 leading-relaxed"></p>
+        <div class="flex gap-6">
+            <button id="modal-cancel" class="flex-1 glass-input py-6 rounded-[2.5rem] font-black uppercase text-sm hover:bg-white/30 transition-all">Abbruch</button>
+            <button id="modal-confirm" class="flex-1 bg-[#82bc00] text-white py-6 rounded-[2.5rem] font-black uppercase text-sm shadow-2xl hover:bg-[#6a9a00] transition-all border-t border-white/40">Bestätigen</button>
         </div>
     </div>
 </div>
 
-<div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-8 py-4 rounded-[1.4rem] font-bold text-xs shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-[200]">Status kopiert!</div>
+<div id="toast" class="fixed bottom-16 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-12 py-6 rounded-[2.5rem] font-black text-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 opacity-0 pointer-events-none z-[200] border border-white/10">Status erfolgreich kopiert!</div>
 
 <script>
     let appState = {
@@ -227,13 +309,13 @@
     };
 
     function loadData() {
-        const saved = localStorage.getItem('helios_radar_v2');
+        const saved = localStorage.getItem('helios_radar_universal_v2');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 appState = { ...appState, ...parsed };
                 if (appState.darkMode) document.body.classList.add('dark-mode');
-            } catch (e) { console.error("Load failed", e); }
+            } catch (e) { console.error(e); }
         }
         updateDashboard();
         updateStatusUI();
@@ -242,7 +324,7 @@
     }
 
     function saveData() {
-        localStorage.setItem('helios_radar_v2', JSON.stringify(appState));
+        localStorage.setItem('helios_radar_universal_v2', JSON.stringify(appState));
         updateDashboard();
     }
 
@@ -250,20 +332,21 @@
         appState.darkMode = !appState.darkMode;
         document.body.classList.toggle('dark-mode');
         saveData();
+        updateStatusUI();
     }
 
     function startTimers() {
         setInterval(() => {
             const diff = Date.now() - appState.znaStatus.timestamp;
-            const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
-            const mins = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-            const secs = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-            const timerEl = document.getElementById('zna-timer');
-            if (timerEl) timerEl.innerText = `Seit ${hours}:${mins}:${secs}`;
+            const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            const el = document.getElementById('zna-timer');
+            if (el) el.innerText = `Seit ${h}:${m}:${s}`;
         }, 1000);
     }
 
-    window.switchTab = function(tab) {
+    window.switchTab = (tab) => {
         appState.currentTab = tab;
         render();
         saveData();
@@ -286,8 +369,8 @@
             }
         });
 
-        const mapping = { 'sum-m': totals.m, 'sum-w': totals.w, 'sum-rooms': totals.rooms, 'sum-iso': totals.iso, 'sum-entl': totals.entl, 'master-check-time': latestTime };
-        for (const [id, val] of Object.entries(mapping)) {
+        const map = { 'sum-m': totals.m, 'sum-w': totals.w, 'sum-rooms': totals.rooms, 'sum-iso': totals.iso, 'sum-entl': totals.entl, 'master-check-time': latestTime };
+        for (const [id, val] of Object.entries(map)) {
             const el = document.getElementById(id);
             if (el) el.innerText = val;
         }
@@ -298,69 +381,69 @@
         const panel = document.getElementById('zna-status-panel');
         const indicator = document.getElementById('zna-indicator');
         const label = document.getElementById('zna-status-label');
+        const glow = document.getElementById('zna-bg-glow');
+        
         if (panel && indicator && label) {
             panel.style.borderLeftColor = status.color;
             indicator.style.backgroundColor = status.color;
             label.innerText = status.label;
-            label.style.color = (appState.darkMode) ? '#fff' : ((status.color === '#fbbf24') ? '#92400e' : status.color);
+            label.style.color = appState.darkMode ? '#fff' : (['#fbbf24', '#82bc00'].includes(status.color) ? '#1e293b' : status.color);
+            if(glow) {
+                glow.style.background = status.color;
+                glow.style.opacity = appState.darkMode ? '0.15' : '0.25';
+            }
         }
     }
 
-    window.setZNAStatus = function(type, color, label) {
+    window.setZNAStatus = (type, color, label) => {
         appState.znaStatus = { type, color, label, timestamp: Date.now() };
         updateStatusUI();
         saveData();
     };
 
-    window.updateVal = function(id, field, val) {
-        const station = appState.stations.find(s => s.id === id);
-        if (station) {
-            station[field] = (['isoType', 'lastCheck', 'note', 'contact'].includes(field)) ? val : (parseInt(val) || 0);
+    window.updateVal = (id, field, val) => {
+        const s = appState.stations.find(st => st.id === id);
+        if (s) {
+            s[field] = (['isoType', 'lastCheck', 'note', 'contact'].includes(field)) ? val : (parseInt(val) || 0);
             const now = new Date();
-            station.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
-            station.rawTimestamp = now.getTime();
+            s.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+            s.rawTimestamp = now.getTime();
             saveData();
             if (!['note', 'contact'].includes(field)) render();
         }
     };
 
-    window.stepVal = function(id, field, step) {
-        const station = appState.stations.find(s => s.id === id);
-        if (station) {
-            station[field] = Math.max(0, (Number(station[field]) || 0) + step);
+    window.stepVal = (id, field, step) => {
+        const s = appState.stations.find(st => st.id === id);
+        if (s) {
+            s[field] = Math.max(0, (Number(s[field]) || 0) + step);
             const now = new Date();
-            station.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
-            station.rawTimestamp = now.getTime();
+            s.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+            s.rawTimestamp = now.getTime();
             saveData();
             render();
         }
     };
 
-    window.copyStatusToClipboard = function() {
-        let text = `🏥 *BETTEM-RADAR HELIOS DUISBURG* 🏥\n`;
-        text += `📅 Stand: ${new Date().toLocaleString('de-DE')}\n`;
-        text += `🚨 ZNA: ${appState.znaStatus.label.toUpperCase()}\n\n`;
-        
+    window.copyStatusToClipboard = () => {
+        let text = `🏥 *BETTEN-RADAR HELIOS* 🏥\n📅 Stand: ${new Date().toLocaleString('de-DE')}\n🚨 ZNA: ${appState.znaStatus.label.toUpperCase()}\n\n`;
         appState.stations.forEach(s => {
-            const free = (Number(s.m)||0) + (Number(s.w)||0) + (Number(s.rooms)||0);
-            if(free > 0 || s.isoCount > 0 || s.note) {
+            if ((Number(s.m)||0) + (Number(s.w)||0) + (Number(s.rooms)||0) > 0 || s.note) {
                 text += `*${s.name}*: M:${s.m} | W:${s.w} | Zimmer:${s.rooms}`;
                 if(s.isoCount > 0) text += ` | ISO:${s.isoCount}(${s.isoType})`;
-                if(s.note) text += ` | Notiz: ${s.note}`;
-                text += ` (Update: ${s.lastCheck})\n`;
+                if(s.note) text += ` | Info: ${s.note}`;
+                text += `\n`;
             }
         });
-
-        const tempInput = document.createElement('textarea');
-        tempInput.value = text;
-        document.body.appendChild(tempInput);
-        tempInput.select();
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
         document.execCommand('copy');
-        document.body.removeChild(tempInput);
-
+        document.body.removeChild(ta);
         const toast = document.getElementById('toast');
         toast.style.opacity = '1';
-        setTimeout(() => toast.style.opacity = '0', 2000);
+        setTimeout(() => toast.style.opacity = '0', 3000);
     };
 
     function showConfirm(text, onConfirm) {
@@ -372,32 +455,42 @@
         document.getElementById('modal-confirm').onclick = () => { modal.classList.add('hidden'); onConfirm(); };
     }
 
-    window.resetValues = function() {
-        showConfirm('Schichtende? Der Status wird archiviert und die Werte zurückgesetzt.', () => {
-            const snapshot = { timestamp: new Date().toLocaleString('de-DE'), zna: appState.znaStatus.label, data: JSON.parse(JSON.stringify(appState.stations)) };
-            appState.history.unshift(snapshot);
-            if (appState.history.length > 50) appState.history.pop();
-            appState.stations.forEach(s => { s.entl = 0; s.m = 0; s.w = 0; s.rooms = 0; s.isoCount = 0; s.isoType = 'Keine'; s.note = ''; s.lastCheck = '--:--'; s.rawTimestamp = 0; });
+    window.resetValues = () => {
+        showConfirm('Der Schicht-Reset archiviert den aktuellen Status und setzt alle Zähler auf Null.', () => {
+            const h = { timestamp: new Date().toLocaleString('de-DE'), zna: appState.znaStatus.label, data: JSON.parse(JSON.stringify(appState.stations)) };
+            appState.history.unshift(h);
+            if (appState.history.length > 20) appState.history.pop();
+            appState.stations.forEach(s => { 
+                s.entl = 0; s.m = 0; s.w = 0; s.rooms = 0; s.isoCount = 0; 
+                s.isoType = 'Keine'; s.note = ''; s.contact = ''; s.lastCheck = '--:--'; s.rawTimestamp = 0; 
+            });
             appState.znaStatus.timestamp = Date.now();
             saveData(); render();
         });
     };
 
-    window.addStation = function() {
-        const input = document.getElementById('add-station-input');
-        const name = input.value.trim();
+    window.addStation = () => {
+        const el = document.getElementById('add-station-input');
+        const name = el.value.trim();
         if (!name) return;
         appState.stations.push({ id: 'st_' + Date.now(), name, contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoCount: 0, lastCheck: '--:--', rawTimestamp: 0 });
-        input.value = ''; render(); saveData();
+        el.value = ''; render(); saveData();
     };
 
-    function createStepper(id, field, val, bgClass = 'bg-white/10') {
+    window.deleteStation = (id) => {
+        showConfirm('Station wirklich aus der Liste entfernen?', () => {
+            appState.stations = appState.stations.filter(s => s.id !== id);
+            saveData(); render();
+        });
+    };
+
+    function createStepper(id, field, val) {
         return `
-            <div class="flex items-center justify-center gap-1 no-print">
-                <button onclick="stepVal('${id}', '${field}', -1)" class="stepper-btn bg-black/5 hover:bg-black/10">-</button>
+            <div class="flex items-center justify-center gap-3 no-print">
+                <button onclick="stepVal('${id}', '${field}', -1)" class="stepper-btn text-2xl pb-1">-</button>
                 <input type="number" value="${val}" onchange="updateVal('${id}', '${field}', this.value)" 
-                    class="w-10 p-1.5 rounded-lg ${bgClass} text-center font-black outline-none border border-slate-300">
-                <button onclick="stepVal('${id}', '${field}', 1)" class="stepper-btn bg-black/5 hover:bg-black/10">+</button>
+                    class="glass-input w-20 text-center text-lg">
+                <button onclick="stepVal('${id}', '${field}', 1)" class="stepper-btn text-2xl pb-1">+</button>
             </div>
         `;
     }
@@ -408,50 +501,50 @@
         content.innerHTML = '';
 
         if (appState.currentTab === 'history') {
-            let html = `<div class="p-8"> <h3 class="text-2xl font-black mb-8">Archiv</h3> <div class="space-y-4">`;
-            if (appState.history.length === 0) html += `<p class="text-center opacity-40 py-20 font-bold">Keine Archiveinträge.</p>`;
+            let h_html = `<div class="p-16"> <h3 class="text-4xl font-black mb-12">Schicht-Archiv</h3> <div class="space-y-8">`;
+            if (appState.history.length === 0) h_html += `<div class="text-center opacity-40 py-24 font-bold border-4 border-dashed border-white/20 rounded-[4rem]">Noch keine Archiv-Daten verfügbar.</div>`;
             appState.history.forEach(h => {
-                html += `<div class="bg-black/5 rounded-3xl p-6 border border-slate-200">
-                    <p class="text-[10px] font-black uppercase text-[#82bc00] mb-2">${h.timestamp} | ZNA: ${h.zna}</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${h.data.filter(s => (s.m+s.w+s.rooms)>0).map(s => `<div class="text-[11px] font-bold">Station ${s.name}: ${s.m}M/${s.w}W/${s.rooms}Z</div>`).join('')}
+                h_html += `<div class="glass-card p-10">
+                    <p class="text-[12px] font-black uppercase text-[#82bc00] mb-4 tracking-[0.2em]">${h.timestamp} | ZNA Status: ${h.zna}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        ${h.data.filter(s => (s.m+s.w+s.rooms)>0).map(s => `<div class="text-[13px] font-bold opacity-90">${s.name}: ${s.m}M / ${s.w}W / ${s.rooms}Z</div>`).join('')}
                     </div>
                 </div>`;
             });
-            content.innerHTML = html + `</div></div>`;
+            content.innerHTML = h_html + `</div></div>`;
             return;
         }
 
         if (appState.currentTab === 'quick') {
             const grid = document.createElement('div');
-            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8";
+            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-16";
             appState.stations.forEach(s => {
                 const isCritical = (Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0);
                 const card = document.createElement('div');
-                card.className = `rounded-3xl p-6 border-2 transition-all flex flex-col ${isCritical ? 'bg-red-500/10 border-red-500/30' : 'bg-black/5 border-slate-200'}`;
+                card.className = `glass-card p-10 transition-all flex flex-col ${isCritical ? 'bg-red-500/15 border-red-500/40 scale-95' : 'hover:border-[#82bc00]/60 hover:shadow-[0_0_30px_rgba(130,188,0,0.15)]'}`;
                 card.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
+                    <div class="flex justify-between items-start mb-8">
                         <div class="flex flex-col">
-                            <h4 class="text-lg font-black">${s.name}</h4>
-                            <span class="text-[9px] font-bold opacity-60 uppercase">${s.contact || 'Kein Kontakt'}</span>
+                            <h4 class="text-3xl font-black tracking-tighter">${s.name}</h4>
+                            <span class="text-[11px] font-black opacity-60 uppercase tracking-widest mt-2">${s.contact || 'Keine Kontaktperson'}</span>
                         </div>
-                        <span class="text-[10px] font-bold opacity-40">${s.lastCheck}</span>
+                        <span class="text-[11px] font-black opacity-50">${s.lastCheck}</span>
                     </div>
-                    <div class="space-y-2 mb-4">
+                    <div class="space-y-6 mb-8">
                         <div class="flex flex-col">
-                            <div class="flex justify-between text-xs font-black"><span>Männer</span><span>${s.m}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-blue-500" style="width: ${Math.min(100, s.m * 20)}%"></div></div>
+                            <div class="flex justify-between text-[13px] font-black"><span>Männer</span><span>${s.m}</span></div>
+                            <div class="cap-bar"><div class="cap-fill bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)]" style="width: ${Math.min(100, s.m * 20)}%"></div></div>
                         </div>
                         <div class="flex flex-col">
-                            <div class="flex justify-between text-xs font-black"><span>Frauen</span><span>${s.w}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-pink-500" style="width: ${Math.min(100, s.w * 20)}%"></div></div>
+                            <div class="flex justify-between text-[13px] font-black"><span>Frauen</span><span>${s.w}</span></div>
+                            <div class="cap-bar"><div class="cap-fill bg-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.6)]" style="width: ${Math.min(100, s.w * 20)}%"></div></div>
                         </div>
                         <div class="flex flex-col">
-                            <div class="flex justify-between text-xs font-black"><span>Zimmer</span><span>${s.rooms}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-slate-500" style="width: ${Math.min(100, s.rooms * 33)}%"></div></div>
+                            <div class="flex justify-between text-[13px] font-black text-amber-500"><span>Zimmer</span><span>${s.rooms}</span></div>
+                            <div class="cap-bar"><div class="cap-fill bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]" style="width: ${Math.min(100, s.rooms * 33)}%"></div></div>
                         </div>
                     </div>
-                    ${s.note ? `<div class="mt-auto bg-black/5 p-3 rounded-2xl italic text-[11px] font-bold">"${s.note}"</div>` : ''}
+                    ${s.note ? `<div class="mt-auto bg-white/10 p-6 rounded-[2rem] italic text-[13px] font-bold border border-white/20 shadow-inner">"${s.note}"</div>` : ''}
                 `;
                 grid.appendChild(card);
             });
@@ -460,56 +553,55 @@
         }
 
         const table = document.createElement('table');
-        table.className = "w-full text-left table-auto";
+        table.className = "w-full text-left table-auto border-collapse";
         const isBetten = appState.currentTab === 'betten';
         
-        table.innerHTML = `<thead class="bg-black/5 border-b-2 border-[#82bc00]"><tr>
-            <th class="p-6 text-[10px] font-black uppercase tracking-widest no-print"></th>
-            <th class="p-6 text-[10px] font-black uppercase tracking-widest">Station</th>
+        table.innerHTML = `<thead class="bg-white/10 border-b-2 border-[#82bc00]"><tr class="opacity-80">
+            <th class="p-10 text-[12px] font-black uppercase tracking-[0.3em] no-print"></th>
+            <th class="p-10 text-[12px] font-black uppercase tracking-[0.3em]">Station</th>
             ${isBetten ? `
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Bett (M)</th>
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Bett (W)</th>
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Zimmer</th>
-                <th class="p-6 text-[10px] font-black uppercase tracking-widest">Ansprechp. / Notiz</th>
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Entl.</th>
+                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Männer</th>
+                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Frauen</th>
+                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em] text-[#82bc00] drop-shadow-md">Zimmer</th>
+                <th class="p-6 text-[12px] font-black uppercase tracking-[0.3em]">Besetzung / Notiz</th>
+                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Entl.</th>
             ` : `
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Isolation</th>
-                <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Plätze</th>
+                <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Isolation</th>
+                <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Plätze</th>
             `}
-            <th class="p-6 text-center text-[10px] font-black uppercase tracking-widest">Check</th>
-            <th class="p-6 text-right no-print">Optionen</th>
-        </tr></thead><tbody class="divide-y divide-black/5"></tbody>`;
+            <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Check</th>
+            <th class="p-10 text-right no-print">Aktion</th>
+        </tr></thead><tbody class="divide-y divide-white/20"></tbody>`;
 
         const body = table.querySelector('tbody');
         appState.stations.forEach(s => {
             const tr = document.createElement('tr');
-            const isCritical = (isBetten && Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0);
-            if (isCritical) tr.classList.add('critical-row');
+            if (isBetten && Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0) tr.classList.add('critical-row');
             
             tr.innerHTML = `
-                <td class="p-6 text-center no-print"><div class="drag-handle opacity-20">::</div></td>
-                <td class="p-6 font-black">${s.name}</td>
+                <td class="p-10 text-center no-print opacity-30 cursor-grab hover:opacity-100 transition-opacity text-2xl">::</td>
+                <td class="p-10 font-black text-2xl tracking-tighter leading-none">${s.name}</td>
                 ${isBetten ? `
-                    <td class="p-6 text-center">${createStepper(s.id, 'm', s.m, 'bg-blue-500/10')}</td>
-                    <td class="p-6 text-center">${createStepper(s.id, 'w', s.w, 'bg-pink-500/10')}</td>
-                    <td class="p-6 text-center">${createStepper(s.id, 'rooms', s.rooms, 'bg-slate-500/10')}</td>
-                    <td class="p-6 space-y-2">
-                        <input type="text" value="${s.contact}" oninput="updateVal('${s.id}', 'contact', this.value)" placeholder="Kontakt..." class="w-full bg-transparent border-b border-black/10 text-[10px] font-bold">
-                        <input type="text" value="${s.note}" oninput="updateVal('${s.id}', 'note', this.value)" placeholder="Notiz..." class="w-full bg-transparent border-b border-black/10 text-[10px] font-bold italic">
+                    <td class="p-4 text-center">${createStepper(s.id, 'm', s.m)}</td>
+                    <td class="p-4 text-center">${createStepper(s.id, 'w', s.w)}</td>
+                    <td class="p-4 text-center">${createStepper(s.id, 'rooms', s.rooms)}</td>
+                    <td class="p-4 space-y-4 min-w-[300px]">
+                        <input type="text" value="${s.contact}" oninput="updateVal('${s.id}', 'contact', this.value)" placeholder="Besetzung..." class="glass-input w-full text-[13px] py-3">
+                        <input type="text" value="${s.note}" oninput="updateVal('${s.id}', 'note', this.value)" placeholder="Notizen..." class="glass-input w-full text-[13px] py-3 italic">
                     </td>
-                    <td class="p-6 text-center">${createStepper(s.id, 'entl', s.entl)}</td>
+                    <td class="p-4 text-center">${createStepper(s.id, 'entl', s.entl)}</td>
                 ` : `
-                    <td class="p-6 text-center">
-                        <select onchange="updateVal('${s.id}', 'isoType', this.value)" class="p-2 rounded-xl bg-transparent font-black text-[10px] uppercase border border-black/10">
-                            ${['Keine', 'MRSA', 'Noro', 'Influenza', 'Corona', 'Andere'].map(t => `<option ${s.isoType === t ? 'selected' : ''}>${t}</option>`).join('')}
+                    <td class="p-10 text-center">
+                        <select onchange="updateVal('${s.id}', 'isoType', this.value)" class="glass-input text-[14px] uppercase w-56 p-4">
+                            ${['Keine', 'MRSA', 'Noro', 'Influenza', 'Corona', 'Andere'].map(t => `<option ${s.isoType === t ? 'selected' : ''} value="${t}">${t}</option>`).join('')}
                         </select>
                     </td>
-                    <td class="p-6 text-center">${createStepper(s.id, 'isoCount', s.isoCount)}</td>
+                    <td class="p-10 text-center">${createStepper(s.id, 'isoCount', s.isoCount)}</td>
                 `}
-                <td class="p-6 text-center"><span class="text-[10px] font-black opacity-60">${s.lastCheck}</span></td>
-                <td class="p-6 text-right no-print">
-                    <button onclick="deleteStation('${s.id}')" class="p-3 text-red-500 hover:bg-red-500/10 rounded-2xl transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <td class="p-10 text-center"><span class="text-[13px] font-black opacity-60">${s.lastCheck}</span></td>
+                <td class="p-10 text-right no-print">
+                    <button onclick="deleteStation('${s.id}')" class="p-5 text-red-500 hover:bg-red-500/25 rounded-[1.5rem] transition-all hover:scale-110">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                 </td>
             `;
@@ -522,4 +614,5 @@
 </script>
 </body>
 </html>
+
 
