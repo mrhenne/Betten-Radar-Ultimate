@@ -10,291 +10,251 @@
             --helios-green: #82bc00;
             --helios-dark-green: #6a9a00;
             --helios-blue: #004a99;
-            --glass-bg: rgba(255, 255, 255, 0.35);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --glass-highlight: rgba(255, 255, 255, 0.8);
-            --text-color: #0f172a;
-            --glow-color: rgba(130, 188, 0, 0.6);
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --input-bg: #f8fafc;
         }
         
         body.dark-mode {
-            --glass-bg: rgba(15, 23, 42, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-highlight: rgba(255, 255, 255, 0.2);
-            --text-color: #f1f5f9;
-            --glow-color: rgba(130, 188, 0, 0.8);
-            background: radial-gradient(circle at top right, #1e293b, #020617) !important;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #0f172a;
         }
 
         body {
-            background: radial-gradient(circle at top right, #cbd5e1, #e2e8f0, #f8fafc);
-            background-attachment: fixed;
-            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: var(--text-color);
             margin: 0;
-            transition: background 0.5s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* MAXIMALES LIQUID GLASS */
-        .liquid-glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(40px) saturate(250%);
-            -webkit-backdrop-filter: blur(40px) saturate(250%);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid var(--glass-highlight);
-            border-left: 1px solid var(--glass-highlight);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 0 20px rgba(255,255,255,0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Clean UI Cards */
+        .clean-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
         }
 
-        .dark-mode .liquid-glass {
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.05);
+        /* Standard Input Felder */
+        .clean-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.875rem; /* text-sm */
+            outline: none;
+            transition: all 0.2s ease;
+            width: 100%;
         }
 
-        /* EINHEITLICHE EINGABEFELDER MIT ZWANGS-GLOW */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 16px;
-            padding: 12px 16px;
-            font-weight: 800;
-            outline: none !important;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            color: var(--text-color);
-            backdrop-filter: blur(15px);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        .clean-input:focus {
+            border-color: var(--helios-green);
+            box-shadow: 0 0 0 3px rgba(130, 188, 0, 0.15);
         }
 
-        .dark-mode .glass-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Knallharter Override für den Fokus Status */
-        .glass-input:focus, 
-        .glass-input:active,
-        select.glass-input:focus,
-        select.glass-input:active {
-            background-color: rgba(130, 188, 0, 0.15) !important;
-            border-color: var(--helios-green) !important;
-            box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px rgba(130, 188, 0, 0.2) !important;
-            transform: translateY(-2px);
-        }
-
-        /* Select Felder zähmen */
-        select.glass-input {
+        /* Select Felder */
+        select.clean-input {
             cursor: pointer;
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2382bc00'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 14px center !important;
-            background-size: 20px !important;
-            padding-right: 50px !important;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2382bc00'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
         }
 
-        .status-pulse {
-            animation: pulse-ring 2s infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0.8); }
-            70% { box-shadow: 0 0 0 20px rgba(130, 188, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0); }
-        }
-
-        .tab-active {
-            background: var(--helios-green) !important;
-            color: white !important;
-            box-shadow: 0 15px 35px var(--glow-color);
-            transform: translateY(-4px);
-            border-color: transparent !important;
-        }
-
+        /* Stepper Buttons */
         .stepper-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            font-weight: 900;
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            font-size: 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .dark-mode .stepper-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            transition: all 0.1s;
+            user-select: none;
         }
 
         .stepper-btn:hover {
-            background: var(--helios-green);
-            color: white;
+            background-color: var(--helios-green);
             border-color: var(--helios-green);
-            box-shadow: 0 0 25px var(--glow-color);
-            transform: scale(1.15);
+            color: white;
+        }
+        
+        .stepper-btn:active {
+            transform: scale(0.95);
+        }
+
+        .tab-active {
+            background-color: var(--helios-green) !important;
+            color: white !important;
+        }
+
+        .status-pulse {
+            animation: pulse-ring 2.5s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(130, 188, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(130, 188, 0, 0); }
         }
 
         .critical-row {
-            background: rgba(239, 68, 68, 0.15) !important;
-            border-left: 8px solid #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.05) !important;
         }
 
-        .cap-bar {
-            height: 12px;
-            border-radius: 6px;
-            background: rgba(0,0,0,0.15);
-            overflow: hidden;
-            margin-top: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        .drag-handle {
+            cursor: grab;
+            color: var(--text-muted);
+            opacity: 0.5;
+            transition: opacity 0.2s;
         }
-        
-        .cap-fill {
-            height: 100%;
-            transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+        .drag-handle:hover {
+            opacity: 1;
         }
-
-        .glass-card {
-            border-radius: 3rem;
-            overflow: hidden;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid var(--glass-highlight);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            backdrop-filter: blur(20px);
+        .dragging {
+            opacity: 0.4;
+            background-color: var(--input-bg);
         }
 
         @media print {
             .no-print { display: none !important; }
             body { background: white !important; padding: 0 !important; color: black !important; }
-            .liquid-glass, .glass-card { border: 1px solid #000 !important; background: white !important; backdrop-filter: none !important; box-shadow: none !important; }
+            .clean-card { border: 1px solid #ccc !important; box-shadow: none !important; }
         }
     </style>
 </head>
-<body class="p-4 md:p-12">
+<body class="p-4 md:p-8 lg:p-10">
 
 <div class="max-w-7xl mx-auto">
     
     <!-- DASHBOARD -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12 no-print">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 no-print">
         
-        <div id="zna-status-panel" class="lg:col-span-1 liquid-glass rounded-[3.5rem] p-8 border-l-[15px] border-[#82bc00] flex flex-col justify-between relative overflow-hidden">
-            <div id="zna-bg-glow" class="absolute inset-0 opacity-20 pointer-events-none transition-all duration-700"></div>
-            <div class="relative z-10">
-                <h3 class="text-[12px] font-black opacity-60 uppercase tracking-[0.3em] mb-4">ZNA Status</h3>
-                <div class="flex items-center gap-6">
-                    <div id="zna-indicator" class="w-7 h-7 rounded-full bg-[#82bc00] status-pulse"></div>
+        <div id="zna-status-panel" class="lg:col-span-1 clean-card p-6 border-l-[8px] border-[#82bc00] flex flex-col justify-between">
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">ZNA Status</h3>
+                <div class="flex items-center gap-4">
+                    <div id="zna-indicator" class="w-5 h-5 rounded-full bg-[#82bc00] status-pulse"></div>
                     <div class="flex flex-col">
-                        <span id="zna-status-label" class="text-3xl font-black tracking-tight leading-tight">Normalbetrieb</span>
-                        <span id="zna-timer" class="text-[12px] font-bold opacity-75 mt-1">Seit 00:00:00</span>
+                        <span id="zna-status-label" class="text-xl font-black tracking-tight">Normalbetrieb</span>
+                        <span id="zna-timer" class="text-xs font-semibold text-slate-500 mt-0.5">Seit 00:00:00</span>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-4 mt-8 relative z-10">
-                <button onclick="setZNAStatus('normal', '#82bc00', 'Normalbetrieb')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟢</button>
-                <button onclick="setZNAStatus('high', '#fbbf24', 'Erhöht')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟡</button>
-                <button onclick="setZNAStatus('crit', '#ef4444', 'Kritisch')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🔴</button>
-                <button onclick="setZNAStatus('stop', '#7c3aed', 'Abmeldung')" class="w-14 h-14 rounded-[1.2rem] bg-white/30 border border-white/50 flex items-center justify-center hover:scale-125 transition-all shadow-xl backdrop-blur-md">🟣</button>
+            <div class="flex gap-2 mt-6">
+                <button onclick="setZNAStatus('normal', '#82bc00', 'Normalbetrieb')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-green-100 border border-slate-200 transition-colors flex items-center justify-center">🟢</button>
+                <button onclick="setZNAStatus('high', '#fbbf24', 'Erhöht')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-yellow-100 border border-slate-200 transition-colors flex items-center justify-center">🟡</button>
+                <button onclick="setZNAStatus('crit', '#ef4444', 'Kritisch')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-red-100 border border-slate-200 transition-colors flex items-center justify-center">🔴</button>
+                <button onclick="setZNAStatus('stop', '#7c3aed', 'Abmeldung')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-purple-100 border border-slate-200 transition-colors flex items-center justify-center">🟣</button>
             </div>
         </div>
 
-        <div class="lg:col-span-3 liquid-glass rounded-[3.5rem] p-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
-                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Männer</p>
-                <p id="sum-m" class="text-5xl font-black text-[#004a99]">0</p>
+        <div class="lg:col-span-3 clean-card p-6 grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div class="text-center md:border-r border-[var(--border-color)] flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase mb-1 text-slate-500">Männer</p>
+                <p id="sum-m" class="text-3xl font-black text-[#004a99]">0</p>
             </div>
-            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
-                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Frauen</p>
-                <p id="sum-w" class="text-5xl font-black text-pink-600">0</p>
+            <div class="text-center md:border-r border-[var(--border-color)] flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase mb-1 text-slate-500">Frauen</p>
+                <p id="sum-w" class="text-3xl font-black text-pink-600">0</p>
             </div>
-            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
-                <p class="text-[11px] font-black uppercase mb-2 tracking-widest text-amber-500">Zimmer</p>
-                <p id="sum-rooms" class="text-5xl font-black">0</p>
+            <div class="text-center md:border-r border-[var(--border-color)] flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase mb-1 text-amber-500">Zimmer</p>
+                <p id="sum-rooms" class="text-3xl font-black">0</p>
             </div>
-            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
-                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Iso</p>
-                <p id="sum-iso" class="text-5xl font-black text-amber-700">0</p>
+            <div class="text-center md:border-r border-[var(--border-color)] flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase mb-1 text-slate-500">Iso</p>
+                <p id="sum-iso" class="text-3xl font-black text-amber-600">0</p>
             </div>
-            <div class="text-center md:border-r border-white/20 flex flex-col justify-center">
-                <p class="text-[11px] font-black uppercase mb-2 tracking-widest opacity-60">Entl.</p>
-                <p id="sum-entl" class="text-5xl font-black text-[#82bc00]">0</p>
+            <div class="text-center md:border-r border-[var(--border-color)] flex flex-col justify-center">
+                <p class="text-[10px] font-bold uppercase mb-1 text-slate-500">Entl.</p>
+                <p id="sum-entl" class="text-3xl font-black text-[#82bc00]">0</p>
             </div>
-            <div class="text-center bg-white/20 rounded-[2.5rem] flex flex-col justify-center p-4 border border-white/30 shadow-inner backdrop-blur-sm">
-                <p class="text-[10px] font-black text-[#82bc00] uppercase mb-1 tracking-widest drop-shadow-sm">Update</p>
-                <p id="master-check-time" class="text-2xl font-black tracking-tighter">--:--</p>
+            <div class="text-center bg-[var(--input-bg)] rounded-xl flex flex-col justify-center p-3 border border-[var(--border-color)]">
+                <p class="text-[9px] font-bold text-[#82bc00] uppercase mb-0.5">Letztes Update</p>
+                <p id="master-check-time" class="text-xl font-black tracking-tight">--:--</p>
             </div>
         </div>
     </div>
 
     <!-- HEADER NAVIGATION -->
-    <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-8">
-        <div class="flex items-center gap-8 group">
-            <div class="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center shadow-2xl border border-white/80 transform group-hover:rotate-6 transition-all duration-700 relative overflow-hidden">
-                 <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent"></div>
-                 <svg viewBox="0 0 24 24" class="w-14 h-14 text-[#82bc00] relative z-10" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200">
+                 <svg viewBox="0 0 24 24" class="w-8 h-8 text-[#82bc00]" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
             </div>
             <div>
-                <h1 class="text-6xl font-black tracking-tighter leading-none mb-1 drop-shadow-sm">Betten-Radar</h1>
-                <p class="text-[16px] font-black text-[#82bc00] uppercase tracking-[0.6em] opacity-80">Helios Health Group</p>
+                <h1 class="text-3xl font-black tracking-tight leading-none">Betten-Radar</h1>
+                <p class="text-xs font-bold text-[#82bc00] uppercase tracking-widest mt-1">Helios Klinik</p>
             </div>
         </div>
         
-        <div class="flex bg-white/20 p-2.5 rounded-[3rem] shadow-2xl border border-white/30 no-print overflow-x-auto max-w-full gap-2 backdrop-blur-xl">
-            <button id="tab-betten" onclick="switchTab('betten')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all tab-active">🏥 Betten</button>
-            <button id="tab-quick" onclick="switchTab('quick')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">⚡ Schnellansicht</button>
-            <button id="tab-iso" onclick="switchTab('iso')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">☣️ Isolation</button>
-            <button id="tab-history" onclick="switchTab('history')" class="px-8 py-5 rounded-[2.5rem] text-[12px] font-black uppercase tracking-widest transition-all text-slate-600 dark:text-slate-300 hover:bg-white/30">📜 History</button>
-            <button onclick="toggleDarkMode()" class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition-all border border-white/40 text-xl shadow-inner">🌓</button>
+        <div class="flex bg-[var(--card-bg)] p-1.5 rounded-2xl shadow-sm border border-[var(--border-color)] no-print overflow-x-auto max-w-full">
+            <button id="tab-betten" onclick="switchTab('betten')" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors tab-active">🏥 Betten</button>
+            <button id="tab-quick" onclick="switchTab('quick')" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[var(--input-bg)]">⚡ Übersicht</button>
+            <button id="tab-iso" onclick="switchTab('iso')" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[var(--input-bg)]">☣️ Isolation</button>
+            <button id="tab-history" onclick="switchTab('history')" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors hover:bg-[var(--input-bg)]">📜 Archiv</button>
+            <div class="w-px bg-[var(--border-color)] mx-1"></div>
+            <button onclick="toggleDarkMode()" class="px-4 py-2.5 rounded-xl text-lg hover:bg-[var(--input-bg)] transition-colors">🌓</button>
         </div>
     </header>
 
     <!-- MAIN VIEWPORT -->
-    <div id="main-content" class="liquid-glass rounded-[4rem] overflow-hidden mb-16">
+    <div id="main-content" class="clean-card overflow-hidden mb-10">
         <!-- JS Render -->
     </div>
 
     <!-- ACTION FOOTER -->
-    <footer class="flex flex-col md:flex-row gap-10 justify-between items-center no-print pb-24">
-        <div class="flex gap-5 w-full md:w-auto">
-            <input type="text" id="add-station-input" placeholder="Neue Station hinzufügen..." class="glass-input flex-1 md:w-[28rem] text-xl py-6 px-10">
-            <button onclick="addStation()" class="bg-[#82bc00] text-white px-12 py-6 rounded-[2.5rem] font-black text-[14px] uppercase tracking-widest hover:bg-[#6a9a00] transition-all shadow-2xl transform hover:scale-105 active:scale-95 border-t border-white/40 border-b-4 border-[#5d8500]">Station+</button>
+    <footer class="flex flex-col md:flex-row gap-6 justify-between items-center no-print pb-16">
+        <div class="flex gap-3 w-full md:w-auto">
+            <input type="text" id="add-station-input" placeholder="Neue Station..." class="clean-input md:w-64">
+            <button onclick="addStation()" class="bg-[#82bc00] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-[#6a9a00] transition-colors shadow-sm">Hinzufügen</button>
         </div>
         
-        <div class="flex gap-6 items-center flex-wrap justify-center">
-            <button onclick="copyStatusToClipboard()" class="glass-input bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/40 px-10 py-6 rounded-[2.5rem] font-black text-[13px] uppercase tracking-widest hover:bg-blue-500/30 transition-all flex items-center gap-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
-                Copy Status
+        <div class="flex gap-4 items-center flex-wrap justify-center">
+            <button onclick="copyStatusToClipboard()" class="bg-[var(--card-bg)] border border-[var(--border-color)] px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[var(--input-bg)] transition-colors flex items-center gap-2 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                Kopieren
             </button>
-            <button onclick="resetValues()" class="glass-input bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/40 px-10 py-6 rounded-[2.5rem] font-black text-[13px] uppercase tracking-widest hover:bg-red-500/30 transition-all flex items-center gap-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            <button onclick="resetValues()" class="bg-[var(--card-bg)] border border-red-200 text-red-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-50 transition-colors flex items-center gap-2 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 Schicht-Reset
             </button>
         </div>
     </footer>
 </div>
 
-<!-- Glass Modal -->
-<div id="custom-modal" class="fixed inset-0 bg-black/85 backdrop-blur-3xl hidden items-center justify-center z-[100] p-6">
-    <div class="liquid-glass rounded-[4rem] p-16 max-w-xl w-full text-center">
-        <h4 id="modal-title" class="text-4xl font-black mb-6 uppercase tracking-tighter drop-shadow-sm">Aktion bestätigen</h4>
-        <p id="modal-text" class="text-xl mb-12 font-bold opacity-90 leading-relaxed"></p>
-        <div class="flex gap-6">
-            <button id="modal-cancel" class="flex-1 glass-input py-6 rounded-[2.5rem] font-black uppercase text-sm hover:bg-white/30 transition-all">Abbruch</button>
-            <button id="modal-confirm" class="flex-1 bg-[#82bc00] text-white py-6 rounded-[2.5rem] font-black uppercase text-sm shadow-2xl hover:bg-[#6a9a00] transition-all border-t border-white/40">Bestätigen</button>
+<!-- Modal -->
+<div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
+    <div class="clean-card p-8 max-w-sm w-full text-center">
+        <h4 id="modal-title" class="text-xl font-black mb-3">Aktion bestätigen</h4>
+        <p id="modal-text" class="text-sm text-[var(--text-muted)] mb-6 font-medium"></p>
+        <div class="flex gap-3">
+            <button id="modal-cancel" class="flex-1 bg-[var(--input-bg)] border border-[var(--border-color)] py-3 rounded-xl font-bold text-sm hover:bg-[var(--border-color)] transition-colors">Abbruch</button>
+            <button id="modal-confirm" class="flex-1 bg-[#82bc00] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#6a9a00] transition-colors">Bestätigen</button>
         </div>
     </div>
 </div>
 
-<div id="toast" class="fixed bottom-16 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-12 py-6 rounded-[2.5rem] font-black text-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 opacity-0 pointer-events-none z-[200] border border-white/10">Status erfolgreich kopiert!</div>
+<div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg transition-all duration-300 opacity-0 pointer-events-none z-[200]">Status in die Zwischenablage kopiert!</div>
 
 <script>
     let appState = {
@@ -308,8 +268,10 @@
         history: []
     };
 
+    let draggedId = null;
+
     function loadData() {
-        const saved = localStorage.getItem('helios_radar_universal_v2');
+        const saved = localStorage.getItem('helios_radar_clean_v1');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
@@ -324,7 +286,7 @@
     }
 
     function saveData() {
-        localStorage.setItem('helios_radar_universal_v2', JSON.stringify(appState));
+        localStorage.setItem('helios_radar_clean_v1', JSON.stringify(appState));
         updateDashboard();
     }
 
@@ -332,7 +294,6 @@
         appState.darkMode = !appState.darkMode;
         document.body.classList.toggle('dark-mode');
         saveData();
-        updateStatusUI();
     }
 
     function startTimers() {
@@ -348,6 +309,18 @@
 
     window.switchTab = (tab) => {
         appState.currentTab = tab;
+        ['tab-betten', 'tab-quick', 'tab-iso', 'tab-history'].forEach(id => {
+            const btn = document.getElementById(id);
+            if(btn) {
+                if (id === `tab-${tab}`) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-slate-500', 'hover:bg-[var(--input-bg)]');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('hover:bg-[var(--input-bg)]');
+                }
+            }
+        });
         render();
         saveData();
     };
@@ -381,17 +354,12 @@
         const panel = document.getElementById('zna-status-panel');
         const indicator = document.getElementById('zna-indicator');
         const label = document.getElementById('zna-status-label');
-        const glow = document.getElementById('zna-bg-glow');
         
         if (panel && indicator && label) {
             panel.style.borderLeftColor = status.color;
             indicator.style.backgroundColor = status.color;
             label.innerText = status.label;
-            label.style.color = appState.darkMode ? '#fff' : (['#fbbf24', '#82bc00'].includes(status.color) ? '#1e293b' : status.color);
-            if(glow) {
-                glow.style.background = status.color;
-                glow.style.opacity = appState.darkMode ? '0.15' : '0.25';
-            }
+            label.style.color = appState.darkMode ? '#fff' : (status.color === '#fbbf24' ? '#b45309' : status.color);
         }
     }
 
@@ -456,7 +424,7 @@
     }
 
     window.resetValues = () => {
-        showConfirm('Der Schicht-Reset archiviert den aktuellen Status und setzt alle Zähler auf Null.', () => {
+        showConfirm('Der Schicht-Reset archiviert den aktuellen Status und nullt die Zähler.', () => {
             const h = { timestamp: new Date().toLocaleString('de-DE'), zna: appState.znaStatus.label, data: JSON.parse(JSON.stringify(appState.stations)) };
             appState.history.unshift(h);
             if (appState.history.length > 20) appState.history.pop();
@@ -477,20 +445,46 @@
         el.value = ''; render(); saveData();
     };
 
-    window.deleteStation = (id) => {
-        showConfirm('Station wirklich aus der Liste entfernen?', () => {
-            appState.stations = appState.stations.filter(s => s.id !== id);
-            saveData(); render();
-        });
+    // Drag & Drop Handling
+    window.handleDragStart = (e, id) => {
+        draggedId = id;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', id); // Erforderlich für Firefox
+        setTimeout(() => e.target.classList.add('dragging'), 0);
+    };
+    
+    window.handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+    
+    window.handleDragEnd = (e) => {
+        e.target.classList.remove('dragging');
+        draggedId = null;
+    };
+    
+    window.handleDrop = (e, targetId) => {
+        e.preventDefault();
+        if (!draggedId || draggedId === targetId) return;
+        
+        const draggedIdx = appState.stations.findIndex(s => s.id === draggedId);
+        const targetIdx = appState.stations.findIndex(s => s.id === targetId);
+        
+        if (draggedIdx !== -1 && targetIdx !== -1) {
+            const [movedItem] = appState.stations.splice(draggedIdx, 1);
+            appState.stations.splice(targetIdx, 0, movedItem);
+            saveData();
+            render();
+        }
     };
 
     function createStepper(id, field, val) {
         return `
-            <div class="flex items-center justify-center gap-3 no-print">
-                <button onclick="stepVal('${id}', '${field}', -1)" class="stepper-btn text-2xl pb-1">-</button>
+            <div class="flex items-center justify-center gap-1.5 no-print">
+                <button onclick="stepVal('${id}', '${field}', -1)" class="stepper-btn">-</button>
                 <input type="number" value="${val}" onchange="updateVal('${id}', '${field}', this.value)" 
-                    class="glass-input w-20 text-center text-lg">
-                <button onclick="stepVal('${id}', '${field}', 1)" class="stepper-btn text-2xl pb-1">+</button>
+                    class="clean-input w-16 text-center font-bold px-1">
+                <button onclick="stepVal('${id}', '${field}', 1)" class="stepper-btn">+</button>
             </div>
         `;
     }
@@ -501,13 +495,13 @@
         content.innerHTML = '';
 
         if (appState.currentTab === 'history') {
-            let h_html = `<div class="p-16"> <h3 class="text-4xl font-black mb-12">Schicht-Archiv</h3> <div class="space-y-8">`;
-            if (appState.history.length === 0) h_html += `<div class="text-center opacity-40 py-24 font-bold border-4 border-dashed border-white/20 rounded-[4rem]">Noch keine Archiv-Daten verfügbar.</div>`;
+            let h_html = `<div class="p-8"> <h3 class="text-xl font-black mb-6">Schicht-Archiv</h3> <div class="space-y-4">`;
+            if (appState.history.length === 0) h_html += `<div class="text-center text-[var(--text-muted)] py-12 text-sm font-bold border border-dashed border-[var(--border-color)] rounded-xl">Keine Historie vorhanden.</div>`;
             appState.history.forEach(h => {
-                h_html += `<div class="glass-card p-10">
-                    <p class="text-[12px] font-black uppercase text-[#82bc00] mb-4 tracking-[0.2em]">${h.timestamp} | ZNA Status: ${h.zna}</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        ${h.data.filter(s => (s.m+s.w+s.rooms)>0).map(s => `<div class="text-[13px] font-bold opacity-90">${s.name}: ${s.m}M / ${s.w}W / ${s.rooms}Z</div>`).join('')}
+                h_html += `<div class="bg-[var(--input-bg)] rounded-xl p-5 border border-[var(--border-color)]">
+                    <p class="text-xs font-bold uppercase text-[#82bc00] mb-3">${h.timestamp} | Status: ${h.zna}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        ${h.data.filter(s => (s.m+s.w+s.rooms)>0).map(s => `<div class="text-sm font-semibold">${s.name}: ${s.m}M / ${s.w}W / ${s.rooms}Z</div>`).join('')}
                     </div>
                 </div>`;
             });
@@ -517,34 +511,25 @@
 
         if (appState.currentTab === 'quick') {
             const grid = document.createElement('div');
-            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-16";
+            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8";
             appState.stations.forEach(s => {
                 const isCritical = (Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0);
                 const card = document.createElement('div');
-                card.className = `glass-card p-10 transition-all flex flex-col ${isCritical ? 'bg-red-500/15 border-red-500/40 scale-95' : 'hover:border-[#82bc00]/60 hover:shadow-[0_0_30px_rgba(130,188,0,0.15)]'}`;
+                card.className = `rounded-2xl p-6 border transition-all flex flex-col ${isCritical ? 'bg-red-50/50 border-red-200' : 'bg-[var(--card-bg)] border-[var(--border-color)]'}`;
                 card.innerHTML = `
-                    <div class="flex justify-between items-start mb-8">
+                    <div class="flex justify-between items-start mb-6">
                         <div class="flex flex-col">
-                            <h4 class="text-3xl font-black tracking-tighter">${s.name}</h4>
-                            <span class="text-[11px] font-black opacity-60 uppercase tracking-widest mt-2">${s.contact || 'Keine Kontaktperson'}</span>
+                            <h4 class="text-lg font-black">${s.name}</h4>
+                            <span class="text-xs font-bold text-[var(--text-muted)] mt-1">${s.contact || 'Keine Angabe'}</span>
                         </div>
-                        <span class="text-[11px] font-black opacity-50">${s.lastCheck}</span>
+                        <span class="text-[10px] font-bold text-[var(--text-muted)]">${s.lastCheck}</span>
                     </div>
-                    <div class="space-y-6 mb-8">
-                        <div class="flex flex-col">
-                            <div class="flex justify-between text-[13px] font-black"><span>Männer</span><span>${s.m}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)]" style="width: ${Math.min(100, s.m * 20)}%"></div></div>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex justify-between text-[13px] font-black"><span>Frauen</span><span>${s.w}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.6)]" style="width: ${Math.min(100, s.w * 20)}%"></div></div>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex justify-between text-[13px] font-black text-amber-500"><span>Zimmer</span><span>${s.rooms}</span></div>
-                            <div class="cap-bar"><div class="cap-fill bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]" style="width: ${Math.min(100, s.rooms * 33)}%"></div></div>
-                        </div>
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between text-sm font-bold bg-blue-50/50 dark:bg-blue-900/20 px-3 py-1.5 rounded-lg text-blue-700 dark:text-blue-300"><span>Männer</span><span>${s.m}</span></div>
+                        <div class="flex justify-between text-sm font-bold bg-pink-50/50 dark:bg-pink-900/20 px-3 py-1.5 rounded-lg text-pink-700 dark:text-pink-300"><span>Frauen</span><span>${s.w}</span></div>
+                        <div class="flex justify-between text-sm font-bold bg-amber-50/50 dark:bg-amber-900/20 px-3 py-1.5 rounded-lg text-amber-700 dark:text-amber-300"><span>Zimmer</span><span>${s.rooms}</span></div>
                     </div>
-                    ${s.note ? `<div class="mt-auto bg-white/10 p-6 rounded-[2rem] italic text-[13px] font-bold border border-white/20 shadow-inner">"${s.note}"</div>` : ''}
+                    ${s.note ? `<div class="mt-auto bg-[var(--input-bg)] p-3 rounded-lg text-xs font-semibold italic text-[var(--text-muted)]">"${s.note}"</div>` : ''}
                 `;
                 grid.appendChild(card);
             });
@@ -556,54 +541,58 @@
         table.className = "w-full text-left table-auto border-collapse";
         const isBetten = appState.currentTab === 'betten';
         
-        table.innerHTML = `<thead class="bg-white/10 border-b-2 border-[#82bc00]"><tr class="opacity-80">
-            <th class="p-10 text-[12px] font-black uppercase tracking-[0.3em] no-print"></th>
-            <th class="p-10 text-[12px] font-black uppercase tracking-[0.3em]">Station</th>
+        table.innerHTML = `<thead class="bg-[var(--input-bg)] border-b-2 border-[#82bc00]"><tr class="text-[var(--text-muted)]">
+            <th class="p-4 w-10 text-xs font-bold uppercase tracking-wider no-print"></th>
+            <th class="p-4 text-xs font-bold uppercase tracking-wider">Station</th>
             ${isBetten ? `
-                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Männer</th>
-                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Frauen</th>
-                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em] text-[#82bc00] drop-shadow-md">Zimmer</th>
-                <th class="p-6 text-[12px] font-black uppercase tracking-[0.3em]">Besetzung / Notiz</th>
-                <th class="p-6 text-center text-[12px] font-black uppercase tracking-[0.3em]">Entl.</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Männer</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Frauen</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider text-amber-500">Zimmer</th>
+                <th class="p-4 text-xs font-bold uppercase tracking-wider">Zuständig / Notiz</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Entl.</th>
             ` : `
-                <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Isolation</th>
-                <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Plätze</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Isolation</th>
+                <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Plätze</th>
             `}
-            <th class="p-10 text-center text-[12px] font-black uppercase tracking-[0.3em]">Check</th>
-            <th class="p-10 text-right no-print">Aktion</th>
-        </tr></thead><tbody class="divide-y divide-white/20"></tbody>`;
+            <th class="p-4 text-center text-xs font-bold uppercase tracking-wider">Zeit</th>
+        </tr></thead><tbody class="divide-y divide-[var(--border-color)]"></tbody>`;
 
         const body = table.querySelector('tbody');
         appState.stations.forEach(s => {
             const tr = document.createElement('tr');
+            
+            // Wichtig für Drag & Drop
+            tr.draggable = true;
+            tr.ondragstart = (e) => handleDragStart(e, s.id);
+            tr.ondragover = handleDragOver;
+            tr.ondragend = handleDragEnd;
+            tr.ondrop = (e) => handleDrop(e, s.id);
+
             if (isBetten && Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0) tr.classList.add('critical-row');
             
             tr.innerHTML = `
-                <td class="p-10 text-center no-print opacity-30 cursor-grab hover:opacity-100 transition-opacity text-2xl">::</td>
-                <td class="p-10 font-black text-2xl tracking-tighter leading-none">${s.name}</td>
+                <td class="p-4 text-center no-print drag-handle" title="Station verschieben">
+                    <svg class="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+                </td>
+                <td class="p-4 font-bold text-lg">${s.name}</td>
                 ${isBetten ? `
                     <td class="p-4 text-center">${createStepper(s.id, 'm', s.m)}</td>
                     <td class="p-4 text-center">${createStepper(s.id, 'w', s.w)}</td>
                     <td class="p-4 text-center">${createStepper(s.id, 'rooms', s.rooms)}</td>
-                    <td class="p-4 space-y-4 min-w-[300px]">
-                        <input type="text" value="${s.contact}" oninput="updateVal('${s.id}', 'contact', this.value)" placeholder="Besetzung..." class="glass-input w-full text-[13px] py-3">
-                        <input type="text" value="${s.note}" oninput="updateVal('${s.id}', 'note', this.value)" placeholder="Notizen..." class="glass-input w-full text-[13px] py-3 italic">
+                    <td class="p-4 space-y-2 min-w-[200px]">
+                        <input type="text" value="${s.contact}" oninput="updateVal('${s.id}', 'contact', this.value)" placeholder="Zuständige Person..." class="clean-input">
+                        <input type="text" value="${s.note}" oninput="updateVal('${s.id}', 'note', this.value)" placeholder="Notiz..." class="clean-input italic">
                     </td>
                     <td class="p-4 text-center">${createStepper(s.id, 'entl', s.entl)}</td>
                 ` : `
-                    <td class="p-10 text-center">
-                        <select onchange="updateVal('${s.id}', 'isoType', this.value)" class="glass-input text-[14px] uppercase w-56 p-4">
+                    <td class="p-4 text-center">
+                        <select onchange="updateVal('${s.id}', 'isoType', this.value)" class="clean-input font-bold uppercase">
                             ${['Keine', 'MRSA', 'Noro', 'Influenza', 'Corona', 'Andere'].map(t => `<option ${s.isoType === t ? 'selected' : ''} value="${t}">${t}</option>`).join('')}
                         </select>
                     </td>
-                    <td class="p-10 text-center">${createStepper(s.id, 'isoCount', s.isoCount)}</td>
+                    <td class="p-4 text-center">${createStepper(s.id, 'isoCount', s.isoCount)}</td>
                 `}
-                <td class="p-10 text-center"><span class="text-[13px] font-black opacity-60">${s.lastCheck}</span></td>
-                <td class="p-10 text-right no-print">
-                    <button onclick="deleteStation('${s.id}')" class="p-5 text-red-500 hover:bg-red-500/25 rounded-[1.5rem] transition-all hover:scale-110">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                </td>
+                <td class="p-4 text-center"><span class="text-[10px] font-bold text-[var(--text-muted)]">${s.lastCheck}</span></td>
             `;
             body.appendChild(tr);
         });
@@ -614,5 +603,3 @@
 </script>
 </body>
 </html>
-
-
