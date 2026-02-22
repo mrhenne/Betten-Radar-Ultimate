@@ -298,7 +298,6 @@
         const station = appState.stations.find(s => s.id === id);
         if (station) {
             station[field] = (field === 'isoType' || field === 'lastCheck') ? val : (parseInt(val) || 0);
-            // Auto-timestamp
             const now = new Date();
             station.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
             station.rawTimestamp = now.getTime();
@@ -311,7 +310,6 @@
         const station = appState.stations.find(s => s.id === id);
         if (station) {
             station[field] = Math.max(0, (Number(station[field]) || 0) + step);
-            // Auto-timestamp
             const now = new Date();
             station.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
             station.rawTimestamp = now.getTime();
@@ -426,14 +424,14 @@
             appState.stations.forEach(s => {
                 const totalFree = (Number(s.m) || 0) + (Number(s.w) || 0) + (Number(s.rooms) || 0);
                 if (totalFree === 0 && (Number(s.isoCount) || 0) === 0) return;
-                const isCritical = (Number(s.rooms) === 0);
+                const isCritical = (Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0);
                 const card = document.createElement('div');
                 card.className = `rounded-3xl p-6 border-2 shadow-sm transition-all ${isCritical ? 'bg-red-50 border-red-200 scale-95 opacity-90' : 'bg-white border-slate-100'}`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-2">
                              <h4 class="text-lg font-black text-slate-900">${s.name}</h4>
-                             ${isCritical ? '<span class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full font-black animate-pulse">VOLL</span>' : ''}
+                             ${isCritical ? '<span class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full font-black animate-pulse">KEINE KAPAZITÄT</span>' : ''}
                         </div>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">${s.lastCheck}</span>
                     </div>
@@ -483,7 +481,7 @@
         body.className = "divide-y divide-slate-200";
         appState.stations.forEach(s => {
             const tr = document.createElement('tr');
-            const isCritical = (appState.currentTab === 'betten' && Number(s.rooms) === 0);
+            const isCritical = (appState.currentTab === 'betten' && Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0);
             tr.className = `group hover:bg-slate-100/80 transition-all duration-300 ${isCritical ? 'critical-row' : ''}`;
             tr.setAttribute('draggable', 'true');
             tr.setAttribute('ondragstart', `handleDragStart(event, '${s.id}')`);
@@ -499,7 +497,7 @@
                     <td class="p-6 font-black text-slate-900">
                         <div class="flex flex-col">
                             <span>${s.name}</span>
-                            ${isCritical ? '<span class="text-[8px] text-red-500 font-black tracking-widest uppercase">Kein Zimmer frei</span>' : ''}
+                            ${isCritical ? '<span class="text-[8px] text-red-500 font-black tracking-widest uppercase">Keine Kapazitäten</span>' : ''}
                         </div>
                     </td>
                     <td class="p-6 text-center">${createStepper(s.id, 'm', s.m, 'bg-blue-50', 'text-blue-900')}</td>
