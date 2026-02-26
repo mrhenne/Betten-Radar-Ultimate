@@ -258,8 +258,8 @@
         darkMode: false,
         znaStatus: { type: 'normal', color: '#82bc00', label: 'Normalbetrieb', timestamp: Date.now() },
         stations: [
-            { id: '1a', name: 'Station 1A', contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, lastCheck: '--:--', rawTimestamp: 0 },
-            { id: 'zna_holding', name: 'ZNA Holding', contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, lastCheck: '--:--', rawTimestamp: 0 }
+            { id: '1a', name: 'Station 1A', contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, isoNote: '', lastCheck: '--:--', rawTimestamp: 0 },
+            { id: 'zna_holding', name: 'ZNA Holding', contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, isoNote: '', lastCheck: '--:--', rawTimestamp: 0 }
         ],
         history: []
     };
@@ -277,6 +277,7 @@
                         s.isoW = 0;
                         delete s.isoCount;
                     }
+                    if (s.isoNote === undefined) s.isoNote = '';
                 });
                 appState = { ...appState, ...parsed };
                 if (appState.darkMode) document.body.classList.add('dark-mode');
@@ -374,12 +375,12 @@
     window.updateVal = (id, field, val) => {
         const s = appState.stations.find(st => st.id === id);
         if (s) {
-            s[field] = (['isoType', 'lastCheck', 'note', 'contact'].includes(field)) ? val : (parseInt(val) || 0);
+            s[field] = (['isoType', 'lastCheck', 'note', 'contact', 'isoNote'].includes(field)) ? val : (parseInt(val) || 0);
             const now = new Date();
             s.lastCheck = now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
             s.rawTimestamp = now.getTime();
             saveData();
-            if (!['note', 'contact'].includes(field)) render();
+            if (!['note', 'contact', 'isoNote'].includes(field)) render();
         }
     };
 
@@ -401,7 +402,7 @@
             const isoSum = (Number(s.isoM) || 0) + (Number(s.isoW) || 0);
             if ((Number(s.m)||0) + (Number(s.w)||0) + (Number(s.rooms)||0) > 0 || isoSum > 0 || s.note) {
                 text += `*${s.name}*: M:${s.m} | W:${s.w} | Zimmer:${s.rooms}`;
-                if(isoSum > 0) text += ` | ISO:${isoSum}(${s.isoType})`;
+                if(isoSum > 0) text += ` | ISO:${isoSum}(${s.isoType}${s.isoNote ? ' - ' + s.isoNote : ''})`;
                 if(s.note) text += ` | Info: ${s.note}`;
                 text += `\n`;
             }
@@ -434,7 +435,7 @@
             const h = { timestamp: new Date().toLocaleString('de-DE'), zna: appState.znaStatus.label, data: JSON.parse(JSON.stringify(appState.stations)) };
             appState.history.unshift(h);
             if (appState.history.length > 20) appState.history.pop();
-            appState.stations.forEach(s => { s.entl = 0; s.m = 0; s.w = 0; s.rooms = 0; s.isoM = 0; s.isoW = 0; s.isoType = 'Keine'; s.note = ''; s.contact = ''; s.lastCheck = '--:--'; s.rawTimestamp = 0; });
+            appState.stations.forEach(s => { s.entl = 0; s.m = 0; s.w = 0; s.rooms = 0; s.isoM = 0; s.isoW = 0; s.isoType = 'Keine'; s.note = ''; s.contact = ''; s.isoNote = ''; s.lastCheck = '--:--'; s.rawTimestamp = 0; });
             appState.znaStatus.timestamp = Date.now();
             saveData(); render();
         });
@@ -444,7 +445,7 @@
         const el = document.getElementById('add-station-input');
         const name = el.value.trim();
         if (!name) return;
-        appState.stations.push({ id: 'st_' + Date.now(), name, contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, lastCheck: '--:--', rawTimestamp: 0 });
+        appState.stations.push({ id: 'st_' + Date.now(), name, contact: '', entl: 0, m: 0, w: 0, rooms: 0, note: '', isoType: 'Keine', isoM: 0, isoW: 0, isoNote: '', lastCheck: '--:--', rawTimestamp: 0 });
         el.value = ''; render(); saveData();
     };
 
@@ -569,7 +570,7 @@
                 <th class="p-3">Tel / Notiz</th>
                 <th class="p-3 text-center">Entl.</th>
             ` : `
-                <th class="p-3">Iso-Typ</th>
+                <th class="p-3">Iso-Typ / Freitext</th>
                 <th class="p-3 text-center">Männer</th>
                 <th class="p-3 text-center">Frauen</th>
             `}
@@ -585,6 +586,10 @@
             tr.ondragend = handleDragEnd;
             tr.ondrop = (e) => handleDrop(e, s.id);
             if (isBetten && Number(s.m) === 0 && Number(s.w) === 0 && Number(s.rooms) === 0) tr.classList.add('critical-row');
+            
+            const isoOptions = ['Keine', 'MRSA', 'Noro', 'RSV', 'Influenza A', 'Influenza B', 'Corona', 'Andere / Freitext'];
+            const isOther = s.isoType === 'Andere / Freitext';
+
             tr.innerHTML = `
                 <td class="p-3 text-center no-print drag-handle">⋮⋮</td>
                 <td class="p-3 font-bold text-sm">${s.name}</td>
@@ -598,7 +603,12 @@
                     </td>
                     <td class="p-2 text-center">${createStepper(s.id, 'entl', s.entl)}</td>
                 ` : `
-                    <td class="p-3"><select onchange="updateVal('${s.id}', 'isoType', this.value)" class="glass-input text-[11px] font-bold uppercase w-full max-w-[150px]">${['Keine', 'MRSA', 'Noro', 'Influenza', 'Corona', 'Andere'].map(t => `<option ${s.isoType === t ? 'selected' : ''} value="${t}">${t}</option>`).join('')}</select></td>
+                    <td class="p-3 space-y-1">
+                        <select onchange="updateVal('${s.id}', 'isoType', this.value)" class="glass-input text-[11px] font-bold uppercase w-full max-w-[160px]">
+                            ${isoOptions.map(t => `<option ${s.isoType === t ? 'selected' : ''} value="${t}">${t}</option>`).join('')}
+                        </select>
+                        ${isOther ? `<input type="text" value="${s.isoNote}" oninput="updateVal('${s.id}', 'isoNote', this.value)" placeholder="Freitext Info..." class="glass-input w-full py-1 text-[11px] max-w-[160px]">` : ''}
+                    </td>
                     <td class="p-2 text-center">${createStepper(s.id, 'isoM', s.isoM)}</td>
                     <td class="p-2 text-center">${createStepper(s.id, 'isoW', s.isoW)}</td>
                 `}
